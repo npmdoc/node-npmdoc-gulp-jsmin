@@ -1,0 +1,142 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/chilijung/gulp-jsmin/"
+
+    >gulp-jsmin (v0.1.5)</a>
+</h1>
+<h4>minify js using gulp</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-jsmin">module gulp-jsmin</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jsmin.gulp-jsmin">
+            function <span class="apidocSignatureSpan"></span>gulp-jsmin
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-jsmin" id="apidoc.module.gulp-jsmin">module gulp-jsmin</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-jsmin.gulp-jsmin" id="apidoc.element.gulp-jsmin.gulp-jsmin">
+        function <span class="apidocSignatureSpan"></span>gulp-jsmin
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-jsmin = function () {
+	return map(function (file, cb) {
+		if (file.isNull()) {
+			return cb(null, file);
+		}
+
+		if (file.isStream()) {
+			return cb(new gutil.PluginError(&#x27;gulp-jsmin&#x27;, &#x27;Streaming not supported&#x27;));
+		}
+
+		if ([&#x27;.js&#x27;].indexOf(path.extname(file.path)) === -1) {
+			gutil.log(&#x27;gulp-jsmin: Skipping unsupported js&#x27; + gutil.colors.blue(file.relative));
+			return cb(null, file);
+		}
+
+		tempWrite(file.contents, path.extname(file.path), function (err, tempFile) {
+			if (err) {
+				return cb(new gutil.PluginError(&#x27;gulp-jsmin&#x27;, err));
+			}
+
+			fs.stat(tempFile, function (err, stats) {
+				if (err) {
+					return cb(new gutil.PluginError(&#x27;gulp-jsmin&#x27;, err));
+				}
+
+				fs.readFile(tempFile, { encoding : &#x27;UTF-8&#x27;}, function(err, data) {
+					if (err) {
+						return cb(new gutil.PluginError(&#x27;gulp-jsmin&#x27;, err));
+					}
+
+					var minimized = jsmin({&#x27;code&#x27;: data, &#x27;src&#x27;: file.relative, &#x27;dist&#x27;:file.relative + &#x27;.min.js&#x27;});
+					gutil.log(&#x27;gulp-jsmin:&#x27;, gutil.colors.green(&#x27;✔ &#x27;) + file.relative);
+					file.contents = new Buffer(minimized.code);
+					file.sourceMap = JSON.parse(minimized.sourcemap);
+					cb(null, file);
+
+				
+				});
+
+			});
+		});
+	});
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
